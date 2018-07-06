@@ -6,16 +6,16 @@ using System.Text;
 
 namespace EFvsNICORM
 {
-    public class EFRepository
+    public class EFRepository : IRepository
     {
         /// <summary>
         /// Get a product using the database id.
         /// </summary>
         /// <param name="productId"></param>
         /// <returns></returns>
-        public Models.Product GetProduct (int productId)
+        public EFModels.Product GetProduct (int productId)
         {
-            using (var db = new Models.AdventureWorksContext())
+            using (var db = new EFModels.AdventureWorksContext())
             {
                 var product = db.Product
                     .Where(p => p.ProductId == productId)
@@ -24,12 +24,28 @@ namespace EFvsNICORM
             }
         }
         /// <summary>
+        /// Get a product using the database id without EF tracking.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        public EFModels.Product GetProductNoTracking(int productId)
+        {
+            using (var db = new EFModels.AdventureWorksContext())
+            {
+                var product = db.Product
+                    .Where(p => p.ProductId == productId)
+                    .AsNoTracking()
+                    .FirstOrDefault();
+                return product;
+            }
+        }
+        /// <summary>
         /// Get all of the products.
         /// </summary>
         /// <returns></returns>
-        public List<Models.Product> GetProducts()
+        public List<EFModels.Product> GetProducts()
         {
-            using (var db = new Models.AdventureWorksContext())
+            using (var db = new EFModels.AdventureWorksContext())
             {
                 var products = db.Product
                     .ToList();
@@ -40,9 +56,9 @@ namespace EFvsNICORM
         /// Get all of the products without EF tracking.
         /// </summary>
         /// <returns></returns>
-        public List<Models.Product> GetProductsNoTracking()
+        public List<EFModels.Product> GetProductsNoTracking()
         {
-            using (var db = new Models.AdventureWorksContext())
+            using (var db = new EFModels.AdventureWorksContext())
             {
                 var products = db.Product
                     .AsNoTracking()
@@ -54,9 +70,9 @@ namespace EFvsNICORM
         /// Get all of the products without EF tracking and sorted in code.
         /// </summary>
         /// <returns></returns>
-        public List<Models.Product> GetProductsOrderBy()
+        public List<EFModels.Product> GetProductsOrderBy()
         {
-            using (var db = new Models.AdventureWorksContext())
+            using (var db = new EFModels.AdventureWorksContext())
             {
                 var products = db.Product
                     .AsNoTracking()
@@ -70,9 +86,9 @@ namespace EFvsNICORM
         /// Get all of the products without EF tracking and sorted in SQL.
         /// </summary>
         /// <returns></returns>
-        public List<Models.Product> GetProductsSQLOrderBy()
+        public List<EFModels.Product> GetProductsSQLOrderBy()
         {
-            using (var db = new Models.AdventureWorksContext())
+            using (var db = new EFModels.AdventureWorksContext())
             {
                 var products = db.Product
                     .OrderBy(p => p.ProductId)
@@ -86,9 +102,9 @@ namespace EFvsNICORM
         /// </summary>
         /// <param name="subcategoryId"></param>
         /// <returns></returns>
-        public List<Models.Product> GetProductsBySubcategory(int subcategoryId)
+        public List<EFModels.Product> GetProductsBySubcategory(int subcategoryId)
         {
-            using (var db = new Models.AdventureWorksContext())
+            using (var db = new EFModels.AdventureWorksContext())
             {
                 var products = db.Product
                     .Where(b => b.ProductSubcategoryId == subcategoryId)
